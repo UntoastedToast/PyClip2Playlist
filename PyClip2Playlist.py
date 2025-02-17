@@ -1,8 +1,19 @@
 import csv
+import os
+import sys
 import pyperclip
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 from patterns import patterns
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 songs = []  # List to store extracted songs
 
@@ -88,6 +99,7 @@ def save_csv(song_list, filename='playlist.csv'):
 root = tk.Tk()
 root.title("PyClip2Playlist")
 root.geometry("900x600")
+root.iconbitmap(resource_path('app.ico'))
 root.minsize(800, 500)
 
 # Apply a modern theme if available

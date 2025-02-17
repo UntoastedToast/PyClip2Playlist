@@ -3,3 +3,7 @@
 
 # Python bytecode cache directories
 __pycache__/
+
+# PyInstaller build directories
+build/
+dist/
