@@ -35,3 +35,6 @@ env/
 # Operating System
 .DS_Store
 Thumbs.db
+
+# Bumpversion
+#.bumpversion.cfg   # Commented out to version control .bumpversion.cfg

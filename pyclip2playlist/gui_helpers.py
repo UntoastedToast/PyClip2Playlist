@@ -38,9 +38,16 @@ def create_left_frame(gui):
     gui.paned.add(left_frame, weight=1)
     clipboard_label = ttk.Label(left_frame, text="Clipboard Content:")
     clipboard_label.pack(anchor=tk.W)
-    gui.clipboard_text = scrolledtext.ScrolledText(left_frame, wrap=tk.WORD, height=15)
+    gui.clipboard_text = scrolledtext.ScrolledText(left_frame, wrap=tk.WORD, height=15, font=('TkDefaultFont', 10))
     gui.clipboard_text.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
-    gui.clipboard_text.insert(tk.END, load_clipboard())
+    # Configure text widget for UTF-8
+    gui.clipboard_text.configure(font=('TkDefaultFont', 10))
+    content = load_clipboard()
+    if isinstance(content, bytes):
+        content = content.decode('utf-8', errors='replace')
+    else:
+        content = content.encode('utf-8', errors='replace').decode('utf-8')
+    gui.clipboard_text.insert(tk.END, content)
     gui.clipboard_text.config(state='normal')
     clipboard_buttons = ttk.Frame(left_frame)
     clipboard_buttons.pack(fill=tk.X, pady=5)
@@ -57,12 +64,17 @@ def create_right_frame(gui):
     table_label.pack(anchor=tk.W)
     tree_frame = ttk.Frame(right_frame)
     tree_frame.pack(fill=tk.BOTH, expand=True)
+    # Configure style for treeview
+    style = ttk.Style()
+    style.configure("Treeview", font=('TkDefaultFont', 10))
+    style.configure("Treeview.Heading", font=('TkDefaultFont', 10, 'bold'))
+    
     gui.tree = ttk.Treeview(tree_frame, columns=('TITLE', 'ARTIST'),
-                              show='headings', selectmode='browse')
+                           show='headings', selectmode='browse', style="Treeview")
     gui.tree.heading('TITLE', text='Title')
     gui.tree.heading('ARTIST', text='Artist')
-    gui.tree.column('TITLE', anchor='w')
-    gui.tree.column('ARTIST', anchor='w')
+    gui.tree.column('TITLE', anchor='w', width=300)
+    gui.tree.column('ARTIST', anchor='w', width=200)
     vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=gui.tree.yview)
     gui.tree.configure(yscrollcommand=vsb.set)
     vsb.pack(side='right', fill='y')

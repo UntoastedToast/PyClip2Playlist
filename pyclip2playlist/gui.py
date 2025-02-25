@@ -45,21 +45,28 @@ class PyClip2PlaylistGUI:
         gui_helpers.create_layout(self)
         gui_helpers.create_status_bar(self)
     
+    def _normalize_text(self, text):
+        """Normalize unicode text and handle bytes conversion."""
+        if isinstance(text, bytes):
+            return text.decode('utf-8', errors='replace')
+        return text.encode('utf-8', errors='replace').decode('utf-8')
+
+    def _set_icon(self):
+        """Configure window icon."""
+        try:
+            icon_path = resource_path('resources/app.ico')
+            if not os.path.exists(icon_path):
+                icon_path = resource_path('pyclip2playlist/resources/app.ico')
+            self.root.iconbitmap(icon_path)
+        except Exception:
+            pass
+
     def setup_window(self):
         """Configure main window properties."""
         self.root = tk.Tk()
         self.root.title("PyClip2Playlist")
         self.root.geometry("900x600")
-        try:
-            # When installed as package
-            icon_path = resource_path('resources/app.ico')
-            if not os.path.exists(icon_path):
-                # When run directly from the repository
-                icon_path = resource_path('pyclip2playlist/resources/app.ico')
-            self.root.iconbitmap(icon_path)
-        except Exception:
-            # Skip icon setup if not found.
-            pass
+        self._set_icon()
         self.root.minsize(800, 500)
     
     def setup_styles(self):
@@ -74,6 +81,7 @@ class PyClip2PlaylistGUI:
     def refresh_clipboard(self):
         """Refresh the clipboard content displayed in the text widget."""
         content = load_clipboard()
+        content = self._normalize_text(content)
         self.clipboard_text.config(state='normal')
         self.clipboard_text.delete("1.0", tk.END)
         self.clipboard_text.insert(tk.END, content)
@@ -130,9 +138,9 @@ class PyClip2PlaylistGUI:
         x, y, width, height = self.tree.bbox(row, column)
         cell_value = self.tree.set(row, column)
         
-        edit_entry = tk.Entry(self.tree)
+        edit_entry = tk.Entry(self.tree, font=('TkDefaultFont', 10))
         edit_entry.place(x=x, y=y, width=width, height=height)
-        edit_entry.insert(0, cell_value)
+        edit_entry.insert(0, self._normalize_text(cell_value))
         edit_entry.focus_set()
         
         def save_edit(event=None):

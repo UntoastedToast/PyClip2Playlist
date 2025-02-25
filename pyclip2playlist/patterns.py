@@ -1,6 +1,18 @@
 import re
 
 patterns = [
+    # Pattern 0: Numbered list with timestamp and title-artist.
+    # Example:
+    #   1. 0:03 - If You Want It - Niteflyte
+    #   17. 1:00:08 - Each Time You Pray - Ned Doheny
+    re.compile(
+        r'^\s*'
+        r'(?:\d+[\.\)]\s*)?'                         # Optional number with dot/parenthesis
+        r'(?:(\d+:)?\d{1,2}:\d{2})\s*-?\s*'         # Time stamp (optional hour)
+        r'(?P<track>.+?)\s*-\s*(?P<artist>.+?)'      # Title and artist separated by hyphen
+        r'\s*$'
+    ),
+
     # Pattern 1: Quoted title with time and artist in parentheses.
     # Example:
     #   1) 0:10 "Skate Dancer" (Doug Willis);
