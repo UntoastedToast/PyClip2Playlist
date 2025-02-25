@@ -1,10 +1,6 @@
-"""Main entry point for running PyClip2Playlist."""
+#!/usr/bin/env python3
 
-def main():
-    """Main entry point for the application."""
-    from pyclip2playlist.gui import PyClip2PlaylistGUI
-    app = PyClip2PlaylistGUI()
-    app.run()
+from pyclip2playlist.gui import main
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

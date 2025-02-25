@@ -198,6 +198,9 @@ class PyClip2PlaylistGUI:
             logger.exception("An error occurred during GUI execution:")
             raise
 
-if __name__ == '__main__':
+def main():
     app = PyClip2PlaylistGUI()
     app.run()
+
+if __name__ == "__main__":
+    main()
