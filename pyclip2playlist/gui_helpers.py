@@ -1,15 +1,28 @@
 import tkinter as tk
 from tkinter import ttk, scrolledtext
+import webbrowser
 from .clipboard_utils import load_clipboard
+
+SPOTIFY_IMPORTER_URL = "https://nickwanders.com/projects/ng-spotify-importer/"
+
+def open_spotify_importer():
+    """Open the Spotify Importer website in the default browser."""
+    webbrowser.open(SPOTIFY_IMPORTER_URL)
 
 def create_menu(gui):
     """Create the application menu bar."""
     gui.menubar = tk.Menu(gui.root)
+    
     file_menu = tk.Menu(gui.menubar, tearoff=0)
     file_menu.add_command(label="Save CSV...", command=gui.save_csv_dialog)
     file_menu.add_separator()
     file_menu.add_command(label="Exit", command=gui.root.quit)
     gui.menubar.add_cascade(label="File", menu=file_menu)
+    
+    spotify_menu = tk.Menu(gui.menubar, tearoff=0)
+    spotify_menu.add_command(label="Open Spotify Importer", command=open_spotify_importer)
+    gui.menubar.add_cascade(label="Spotify", menu=spotify_menu)
+    
     gui.root.config(menu=gui.menubar)
 
 def create_layout(gui):
